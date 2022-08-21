@@ -28,6 +28,11 @@ namespace Telemetry_App.SerialControllers
             thread.Start();
         }
 
+        ~SerialPortsCountMonitor()
+        {
+            Dispose();
+        }
+
         public void Dispose()
         {
             tokenSource.Cancel();
@@ -57,7 +62,10 @@ namespace Telemetry_App.SerialControllers
                     oldPorts = ports;
                 }
             }
-            catch (OperationCanceledException) { }
+            catch (OperationCanceledException) 
+            {
+                return;
+            }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);

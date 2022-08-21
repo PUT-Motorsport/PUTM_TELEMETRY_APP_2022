@@ -41,6 +41,11 @@ namespace Telemetry_App.DBControllers
             dbUpdater.Start();
         }
     
+        ~DBController()
+        {
+            Dispose();
+        }
+
         private void DBUpdater(CancellationToken token)
         {
             var dbTableHandlersList = new List<Task>();
@@ -93,7 +98,10 @@ namespace Telemetry_App.DBControllers
                         if (tableHandler.IsCompleted) tableHandler.Start();
                     }
                 }
-                catch (OperationCanceledException) { } 
+                catch (OperationCanceledException) 
+                {
+                    return;
+                } 
                 catch (Exception ex)
                 {
                     MessageBox.Show(ex.Message);

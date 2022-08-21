@@ -38,6 +38,7 @@ namespace Telemetry_App.DBControllers
                 {
                     connection.Open();
                     StringBuilder commandBuilder = new StringBuilder();
+                    commandBuilder.Append($"ALTER DATABASE ").Append(dataBaseToDestroy).AppendLine(" SET SINGLE_USER WITH ROLLBACK IMMEDIATE");
                     commandBuilder.Append($"DROP DATABASE {dataBaseToDestroy}\n");
                     SqlCommand command = new SqlCommand(commandBuilder.ToString(), connection);
                     command.ExecuteNonQuery();
@@ -47,7 +48,6 @@ namespace Telemetry_App.DBControllers
                 {
                     MessageBox.Show(ex.Message);
                 }
-                connection.Dispose();
             }
         }
     }

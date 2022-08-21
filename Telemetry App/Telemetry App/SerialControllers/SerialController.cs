@@ -36,6 +36,11 @@ namespace Telemetry_App.SerialControllers
             DataReceived += OnDataRecived;
         }
 
+        ~SerialController()
+        {
+            Dispose();
+        }
+
         private void OnDataRecived(object sender, SerialDataReceivedEventArgs e)
         {
             while(BytesToRead > 0)
