@@ -1,0 +1,35 @@
+[
+  {
+    "TableName": "TestTableName1",
+    // How many records should be kept in coresponding table
+    "Keep": "10000",
+    "UpdateRateMs": "10",  
+    "Columns": [
+      {
+        "SerialDataIDBinding": "TESTID",
+        "ColumnName": "TestColumnName1",
+        // Any valid sql data type is permited
+        "DataType": "int",
+        // Any valid sql command / data is permited, also it is not required
+        "Default": "5"
+      },
+      {
+        "SerialDataIDBinding": "TestID",
+        "ColumnName": "TestColumnName2",
+        "DataType": "varchar(255)"
+      }
+    ]
+  },
+  {
+    "TableName": "TestTableName",
+    "Keep": "10000",
+    "UpdateRateMs": "10",
+    "Columns": [
+      {
+        "ColumnName": "TestColumnName1",
+        "SerialDataIDBinding": "TESTID",
+        "DataType": "int"
+      }
+    ]
+  }
+]

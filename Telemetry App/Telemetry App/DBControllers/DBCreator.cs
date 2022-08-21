@@ -14,12 +14,14 @@ namespace Telemetry_App.DBControllers
             {
                 try
                 {
+                    connection.Open();
                     StringBuilder commandBuilder = new StringBuilder();
-                    commandBuilder.Append("IF DB_ID(").Append(dataBaseToCrate).AppendLine(" IS NOT NULL");
-                    commandBuilder.Append("\tDROP DATABASE ").AppendLine(dataBaseToCrate);
-                    commandBuilder.Append("CREATE DATABASE").AppendLine(dataBaseToCrate);
+                    commandBuilder.Append(@"IF DB_ID(N'").Append(dataBaseToCrate).AppendLine(@"') IS NOT NULL");
+                    commandBuilder.Append("BEGIN DROP DATABASE ").Append(dataBaseToCrate).AppendLine(" END");
+                    commandBuilder.Append("CREATE DATABASE ").AppendLine(dataBaseToCrate);
                     SqlCommand command = new SqlCommand(commandBuilder.ToString(), connection);
                     command.ExecuteNonQuery();
+                    connection.Close();
                 }
                 catch (Exception ex)
                 {
@@ -34,15 +36,18 @@ namespace Telemetry_App.DBControllers
             {
                 try
                 {
+                    connection.Open();
                     StringBuilder commandBuilder = new StringBuilder();
                     commandBuilder.Append($"DROP DATABASE {dataBaseToDestroy}\n");
                     SqlCommand command = new SqlCommand(commandBuilder.ToString(), connection);
                     command.ExecuteNonQuery();
+                    connection.Close();
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show(ex.Message);
                 }
+                connection.Dispose();
             }
         }
     }

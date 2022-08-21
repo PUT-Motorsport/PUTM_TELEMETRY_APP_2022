@@ -15,29 +15,34 @@ namespace Telemetry_App.SerialControllers
 
         private Action<string> onNewPortFoundCallback;
 
+        private CancellationTokenSource tokenSource;
+
         public SerialPortsCountMonitor(Action<string> onNewPortFoundCallback)
         {
             oldPorts = new List<string>(SerialPort.GetPortNames());
             this.onNewPortFoundCallback = onNewPortFoundCallback;
+            tokenSource = new CancellationTokenSource();
 
-            thread = new Thread(Monitor);
+            thread = new Thread(() => Monitor(tokenSource.Token));
 
             thread.Start();
         }
 
         public void Dispose()
         {
-            thread.Abort();
+            tokenSource.Cancel();
             thread.Join();
         }
 
-        private void Monitor()
+        private void Monitor(CancellationToken token)
         {
             try
             {
                 while (true)
-                {
+                { 
                     Thread.Sleep(100);
+
+                    token.ThrowIfCancellationRequested();
 
                     List<string> ports = new List<string>(SerialPort.GetPortNames());
 
@@ -52,7 +57,7 @@ namespace Telemetry_App.SerialControllers
                     oldPorts = ports;
                 }
             }
-            catch (ThreadAbortException) { }
+            catch (OperationCanceledException) { }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
